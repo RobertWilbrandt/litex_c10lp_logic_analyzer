@@ -48,7 +48,11 @@ def main():
 
     soc = SoC()
 
-    builder = Builder(soc)
+    directory_structure = {
+        "output_dir": os.path.join("build", "soc"),
+    }
+
+    builder = Builder(soc, **directory_structure)
     builder.build(run=args.build)
 
     if args.load:
