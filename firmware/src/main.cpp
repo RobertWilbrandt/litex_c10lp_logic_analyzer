@@ -1,25 +1,8 @@
 #include <irq.h>
 #include <libbase/uart.h>
 
-#include <cstddef>
 #include <cstdio>
 #include <vector>
-
-extern char _end;
-
-extern "C" void* _sbrk(int incr) {
-  // Set up heap pointer
-  static std::byte* heap = nullptr;
-  if (heap == nullptr) {
-    heap = reinterpret_cast<std::byte*>(&_end);
-  }
-
-  // Perform allocation
-  std::byte* const cur_heap = heap;
-  heap += incr;
-
-  return cur_heap;
-}
 
 extern "C" int main(int argc, char* argv[]) {
   irq_setmask(0);

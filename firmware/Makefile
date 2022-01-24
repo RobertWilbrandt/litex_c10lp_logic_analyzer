@@ -6,7 +6,7 @@ SOFTWARE_DIR=$(BUILD_ROOT_DIR)/soc/software
 include $(BUILD_ROOT_DIR)/soc/software/include/generated/variables.mak
 include $(SOC_DIRECTORY)/software/common.mak
 
-OBJECT_NAMES = isr.o main.o crt0.o
+OBJECT_NAMES = isr.o main.o crt0.o libc_syscalls.o
 OBJECTS = $(OBJECT_NAMES:%=$(BUILD_DIR)/%)
 
 COMMONFLAGS = $(DEPFLAGS) -Os $(CPUFLAGS) -g3 -fomit-frame-pointer -Wall -fno-stack-protector -flto -I$(LIBBASE_DIRECTORY) -I$(SOC_DIRECTORY)/software/include -I$(SOC_DIRECTORY)/software -I$(CPU_DIRECTORY) -I$(BUILDINC_DIRECTORY) -nostartfiles
