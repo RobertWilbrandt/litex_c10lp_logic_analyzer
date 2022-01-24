@@ -3,15 +3,7 @@
 
 #include <cstddef>
 #include <cstdio>
-
-class Test {
- public:
-  Test(char c) { uart_write(c); }
-  ~Test() { uart_write('\n'); }
-
- private:
-  char cur_c_;
-};
+#include <vector>
 
 extern char _end;
 
@@ -35,22 +27,17 @@ extern "C" int main(int argc, char* argv[]) {
 
   uart_init();
 
-  char* c1 = new char{'x'};
-  char* c2 = new char{'y'};
-  uart_write(*c1);
-  uart_write(*c2);
+  std::vector<char> test_vector;
+  for (char c = 'a'; c <= 'z'; ++c) {
+    test_vector.push_back(c);
+  }
 
-  char c = 'a';
   while (1) {
-    Test test{c};
-
-    if (c == 'z') {
-      c = 'a';
-    } else {
-      c++;
+    for (char c : test_vector) {
+      uart_write(c);
+      busy_wait(1000);
     }
-
-    busy_wait(1000);
+    uart_write('\n');
   }
   return 0;
 }
