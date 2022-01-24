@@ -1,6 +1,7 @@
 #include <irq.h>
 #include <libbase/uart.h>
 
+#include <cstddef>
 #include <cstdio>
 
 class Test {
@@ -12,13 +13,32 @@ class Test {
   char cur_c_;
 };
 
-extern "C" void* _sbrk(int incr) { return 0; }
+extern char _end;
+
+extern "C" void* _sbrk(int incr) {
+  // Set up heap pointer
+  static std::byte* heap = nullptr;
+  if (heap == nullptr) {
+    heap = reinterpret_cast<std::byte*>(&_end);
+  }
+
+  // Perform allocation
+  std::byte* const cur_heap = heap;
+  heap += incr;
+
+  return cur_heap;
+}
 
 extern "C" int main(int argc, char* argv[]) {
   irq_setmask(0);
   irq_setie(1);
 
   uart_init();
+
+  char* c1 = new char{'x'};
+  char* c2 = new char{'y'};
+  uart_write(*c1);
+  uart_write(*c2);
 
   char c = 'a';
   while (1) {
