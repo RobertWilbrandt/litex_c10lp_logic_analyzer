@@ -10,6 +10,8 @@ extern "C" int main(int argc, char* argv[]) {
 
   uart_init();
 
+  printf("abc\n");
+
   std::vector<char> test_vector;
   for (char c = 'a'; c <= 'z'; ++c) {
     test_vector.push_back(c);
@@ -17,10 +19,10 @@ extern "C" int main(int argc, char* argv[]) {
 
   while (1) {
     for (char c : test_vector) {
-      uart_write(c);
+      printf("%c", c);
       busy_wait(1000);
     }
-    uart_write('\n');
+    printf("\n");
   }
   return 0;
 }
